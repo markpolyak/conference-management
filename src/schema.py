@@ -4,7 +4,7 @@ from typing import List, Dict
 from pydantic import BaseModel, EmailStr, Field
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
-# TODO add trim func for trimming "tel:" from phone field, its just a string
+
 # telegram_id and discord_id оставить строками, так как предполагается использование int64
 # TODO для остральных полей сделать валидацию
 # TODO написать тесты для проверки валидации и заполнения данными
@@ -35,3 +35,4 @@ class ApplicationCreate(ApplicationBase):
 
 class Application(ApplicationBase):
     id: int
+    
