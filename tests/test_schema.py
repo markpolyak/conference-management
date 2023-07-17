@@ -84,3 +84,24 @@ def test_application_schema():
     assert app_examp.coauthors == [{"name": "coath_one", "surname": "coath_surname_one",
                         "patronymic": "coath_patr_one"}]
     
+
+def test_app_empty_tg_id():
+    app_data = {
+        "id": 1,
+        "discord_id": "4321",
+        "email": "test@test.com",
+        "phone": "+79217701199",
+        "name": "Test",
+        "surname": "Tester",
+        "patronymic": "TestTest",
+        "university": "SUAI",
+        "student_group": "4031",
+        "title": "Testing app schema",
+        "adviser": "Durdma",
+        "coauthors": [{"name": "coath_one", "surname": "coath_surname_one",
+                        "patronymic": "coath_patr_one"}]
+    }
+
+    app_examp = Application(**app_data)
+
+    assert app_examp.telegram_id is None
