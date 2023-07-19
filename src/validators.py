@@ -2,19 +2,25 @@ from datetime import datetime
 from typing import Optional
 import re
 
-from src.constants import Coauthors
+from src.constants import Coauthors, RE_LINE_ID, RE_LINE_ADVISER, RE_LINE_FIO, APPLICATION_ROLES
 
 
 def id_validate(val: Optional[str]):
-        if val:
-            pattern = re.compile(r"^\d+$")
-            if pattern.match(val):
-                return val
-            else:
-                raise ValueError('must contain only digits')
+    """
+    Валидация id
+    """
+    if val:
+        pattern = re.compile(RE_LINE_ID)
+        if pattern.match(val):
+            return val
+        else:
+            raise ValueError('must contain only digits')
 
 
 def telephone_number_validate(val: str):
+    """
+    Валидация номера телефона
+    """
     if val:
         if val.find("tel:") != -1:
             val = val[4:]
@@ -23,8 +29,11 @@ def telephone_number_validate(val: str):
 
 
 def fio_validate(val: str):
+    """
+    Валидация для полей ФИО
+    """
     if val:
-            pattern = re.compile(r"^(?:[А-Я]|[а-я]|-)+$")
+            pattern = re.compile(RE_LINE_FIO)
             if pattern.match(val):
                 return val
             else:
@@ -32,16 +41,22 @@ def fio_validate(val: str):
             
 
 def app_role_validate(val: str):
+    """
+    Валидация поля application_role
+    """
     if val:
-            if val in ("студент", "аспирант", "сотрудник"): # переделать в константу
+            if val in APPLICATION_ROLES:
                 return val
             else:
-                raise ValueError("Application role must be ('студент', 'аспирант', 'сотрудник')")
+                raise ValueError(f"Application role must be {APPLICATION_ROLES}")
   
 
 def adviser_validate(val: str):
+    """
+    Валидация поля adviser
+    """
     if val:
-        pattern = re.compile(r"^(?:[А-Я]|[а-я]|-|.)+$")
+        pattern = re.compile(RE_LINE_ADVISER)
         if pattern.match(val):
             return val
         else:
@@ -49,6 +64,9 @@ def adviser_validate(val: str):
 
 
 def coauthors_validate(val: Coauthors):
+    """
+    Валидация поля coauthors
+    """
     if val:
         for coauthor in val:
             fields = list(coauthor.items())
@@ -64,6 +82,9 @@ def coauthors_validate(val: Coauthors):
     
 
 def submitted_timemark(val: str):
+    """
+    Валидация временных полей
+    """
     if val:
         try:
             datetime.fromisoformat(val)
@@ -71,9 +92,12 @@ def submitted_timemark(val: str):
         except ValueError:
             raise ValueError("date must be represented in ISO 8601 form")
     else:
-        return datetime.now().astimezone().isoformat()
+        raise ValueError("No submite time")
 
 
 def updated_timemark(val: str):
+    """
+    Обновление времени
+    """
     return datetime.now().astimezone().isoformat()
 
