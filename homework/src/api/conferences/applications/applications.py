@@ -81,7 +81,7 @@ def table_definition(conference_id: int):
     deadline_time = "2002-08-27T08:00:00+03:00"
     worksheet = get_worksheet(new_identifier)
     get_all_values = worksheet.get_all_values()
-    get_all_values_index = get_all_values[conference_id - 1]
+    # get_all_values_index = get_all_values[conference_id - 1]
     var = len(get_all_values)
 
     identifier = 3
@@ -90,8 +90,8 @@ def table_definition(conference_id: int):
     identif_updated = True
     if var >= conference_id > 1:
         identif_updated = False
-        new_identifier = get_all_values_index[identifier]
-        deadline_time = get_all_values_index[deadline]
+        new_identifier =  get_all_values[conference_id - 1][identifier]
+        deadline_time =  get_all_values[conference_id - 1][deadline]
 
     current_time = datetime.now().astimezone().isoformat()
     # Преобразуем строки в объекты datetime
