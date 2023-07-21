@@ -35,7 +35,7 @@ def make_range(fromR, toR, field, fieldsParams):
 
 # Получение полей от и до с присутствующим значением параметра
 def get_items_by_par(spreadsheetId, fromR : int, toR : int, par : dict, fields : set, fieldsParams : dict):
-    #try:
+    try:
         par['value'] = str(par['value'])
         ranges = []
         # Упорядочивание полей для сравнения по 0 полю
@@ -88,8 +88,8 @@ def get_items_by_par(spreadsheetId, fromR : int, toR : int, par : dict, fields :
             items.append(dict(zip(fields, fieldsArr)))
         return items
 
-    #except IndexError as IE:
-    #    return '-1'
+    except IndexError as IE:
+        return '-1'
 
 # Получение полей по идентификатору (идентификатор равен строке)
 def get_item_by_id(spreadsheetId : str, itemId : int, fields : set, fieldsParams : dict):
