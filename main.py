@@ -19,7 +19,7 @@ GOOGLE_SHEET_ID = os.getenv("TOKEN")
 
 # Модель данных для конференции
 class Conference(BaseModel):
-    id: int
+    id: int =  None
     name_rus: str
     name_rus_short: str
     name_eng: str = None
@@ -69,8 +69,6 @@ sheet = client.open_by_key(GOOGLE_SHEET_ID).sheet1
 
 # Функция для проверки валидности токена
 def is_valid_token(token: str) -> bool:
-    
-    
     token_sheet = os.getenv("TOKEN")
     
     if token == token_sheet:
@@ -78,6 +76,15 @@ def is_valid_token(token: str) -> bool:
     else:
         return False
 
+
+# Функция для получения номера последней строки в таблице
+def get_last_row_number():
+    try:
+        values = sheet.col_values(1)
+        return len(values)
+    except gspread.exceptions.APIError as e:
+        print("Ошибка при получении данных из Google Sheets:", e)
+        return None
 
 # Обработчик корневого пути
 @app.get("/")
@@ -108,7 +115,6 @@ def get_conferences(filter: str = Query("active", enum=["all", "active", "past",
     else:
         filtered_data = data
 
-    # Оставляем только необходимые поля
     result = [
         {
             "id": record["id"],
@@ -138,14 +144,14 @@ def get_conference(conference_id: int, authorization: str = Header(None)):
 
         conference = Conference(**conference)
 
-        # Проверка валидности токена авторизации
         if authorization and is_valid_token(authorization.replace("Bearer ", "")):
             # Включаем поле "google_spreadsheet" в ответе
             conference_dict = conference.dict()
-            conference_dict["google_spreadsheet"] = conference.google_sheet_id
+            conference_dict["google_spreadsheet"] = GOOGLE_SHEET_ID
             return conference_dict
-
-        return conference
+    
+        raise HTTPException(status_code=403, detail='Неверный токен авторизации')
+    
     except IndexError:
         raise HTTPException(status_code=404, detail='Конференция не найдена')
 
@@ -157,35 +163,44 @@ def create_conference(conference: Conference, authorization: str = Header(None))
     if not authorization or not is_valid_token(authorization.replace("Bearer ", "")):
         raise HTTPException(status_code=403, detail='Неверный токен авторизации')
 
-    # Проверка наличия идентификатора конференции
-    if conference.id is None:
-        raise HTTPException(status_code=400, detail='Идентификатор конференции не должен указываться при создании новой записи')
+    # Чтение данных из таблицы Google Sheets
+    data = sheet.get_all_records()
+
+    # Получение максимального значения id из существующих записей
+    max_id = max([int(record["id"]) for record in data]) if data else 0
+
+    # Генерируем новый id, увеличивая его на 1 относительно максимального значения
+    conference_id = str(max_id + 1)
 
     # Добавление данных в таблицу Google Sheets
     row_data = conference.dict()
-    sheet.insert_row(list(row_data.values()), index=len(sheet.get_all_records()) + 2)  # +1 для заголовков и +1 для новой записи
 
-    # Получение порядкового номера добавленной в таблицу строки (id)
-    conference_id = len(sheet.get_all_records()) + 1
+    # Вставляем сгенерированное id в данные перед добавлением в таблицу
+    row_data["id"] = conference_id
+
+    # Вставляем данные в таблицу Google Sheets
+    last_row_number = get_last_row_number()
+    if last_row_number is not None:
+        row_values = list(row_data.values())
+        sheet.insert_row(row_values, index=last_row_number + 1)
 
     # Возвращаем JSON с добавленной информацией и id
     response_data = row_data
-    response_data["google_spreadsheet"] = conference.google_sheet_id
-    response_data["id"] = conference_id
+    response_data["google_spreadsheet"] = GOOGLE_SHEET_ID
     return response_data
-
 
 
 # Редактирование конференции по идентификатору
 @app.put('/conferences/{conference_id}')
 def update_conference(conference_id: int, conference_data: ConferenceUpdate, authorization: str = Header(None)):
+    
+    
     # Проверка наличия валидного токена авторизации
     if not authorization or not is_valid_token(authorization.replace("Bearer ", "")):
         raise HTTPException(status_code=403, detail='Неверный токен авторизации')
 
     # Получение текущих данных о конференции из Google Sheets
     try:
-        # Используйте метод `find` вместо `row_values` для поиска записи по id
         record = sheet.find(str(conference_id))
     except gspread.exceptions.CellNotFound:
         raise HTTPException(status_code=404, detail='Конференция с указанным id не найдена')
@@ -200,7 +215,6 @@ def update_conference(conference_id: int, conference_data: ConferenceUpdate, aut
         setattr(current_conference, field, value)
 
     array  = list(current_conference.dict().values())
-    array[0] = str(array[0])
 
     new_array = []
     new_array.append(array)
