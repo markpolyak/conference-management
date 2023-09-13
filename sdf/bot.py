@@ -265,16 +265,35 @@ async def edit_pub(ctx, id:int):
         title_msg = await bot.wait_for('message', check=lambda m: m.author == ctx.author)
         new_title = title_msg.content
 
-        # Вопрос 2: Новый URL
+        # Вопрос 2: Новый Статус
+        await ctx.send("Введите новый статус рецензирования:")
+        review_msg = await bot.wait_for('message', check=lambda m: m.author == ctx.author)
+        new_review_status = review_msg.content
+
+        # Вопрос 3: Новый URL
         await ctx.send("Введите новый URL:")
         url_msg = await bot.wait_for('message', check=lambda m: m.author == ctx.author)
         new_url = url_msg.content
 
+        # Вопрос 4: Новый URL
+        await ctx.send("Введите новые ключевые слова:")
+        keywords_msg = await bot.wait_for('message', check=lambda m: m.author == ctx.author)
+        new_keywords = keywords_msg.content
+
+        # Вопрос 5: Новый URL
+        await ctx.send("Введите новую аннотацию:")
+        abstract_msg = await bot.wait_for('message', check=lambda m: m.author == ctx.author)
+        new_abstract = abstract_msg.content
+
         upload_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
         existing_data[str(id)] = {
+            "id": id,
             "title": new_title,
+            "upload_date": upload_date,
+            "review_status": new_review_status,
             "url": new_url,
-            "upload_date": upload_date
+            "keywords": new_keywords,
+            "abstract": new_abstract
         }
         with open('publications.json', 'w') as file:
             json.dump(existing_data, file, ensure_ascii=False, indent=4)
@@ -762,7 +781,53 @@ async def select_app(ctx, id: int):
             await interaction.response.send_message("Отменено.")
             return
 
+'''Список заявок по определённой конференции'''
+async def select_appls(conference_name):
+    with open("data.json", 'r') as file:
+        datasel = json.load(file)  # Загружаем JSON файл
 
+        embed_list = []
+
+        # Итерируемся по ключам объекта JSON
+        for key in datasel:
+            item = datasel[key]
+            # Проверяем наличие поля 'conference' и сравниваем его со значением conference_name
+            if 'conference' in item and item['conference'] == conference_name:
+                print(f'Logged in as {bot.user.name}')
+                # Создаем embed и добавляем его в список embed_list
+                embed = disnake.Embed(title='Id заявки', description=item['id'])
+                embed.add_field(name="Telegramm id", value=item['telegram_id'], inline=True)
+                embed.add_field(name="discord id", value=item['discord_id'], inline=True)
+                embed.add_field(name="Опубликована", value=item['submitted_at'], inline=True)
+                embed.add_field(name="Обновлена", value=item['updated_at'], inline=True)
+                embed.add_field(name="email", value=item['email'], inline=True)
+                embed.add_field(name="телефон", value=item['phone'], inline=True)
+                embed.add_field(name="Имя", value=item['name'], inline=True)
+                embed.add_field(name="Фамилия", value=item['surname'], inline=True)
+                embed.add_field(name="Отчество/второе имя", value=item['patronymic'], inline=True)
+                embed.add_field(name="Университет", value=item['university'], inline=True)
+                embed.add_field(name="Студенческая группа", value=item['student_group'], inline=True)
+                embed.add_field(name="Роль", value=item['applicant_role'], inline=True)
+                embed.add_field(name="Название работы", value=item['title'], inline=True)
+                embed.add_field(name="Советник", value=item['adviser'], inline=True)
+                embed.add_field(name="Конференция", value=item['conference'], inline=True)
+                embed.add_field(name="Соавторы", value=item['coauthors'], inline=True)
+                embed_list.append(embed)
+        print(f'Logged in as {bot.user.name}')
+        # Возвращаем список embed_list
+        return embed_list
+
+@bot.command()
+async def search(ctx, * ,conference_name: str):
+    # Вызываем функцию search_objects_by_conference для поиска объектов с заданным значением conference
+    embed_list = await select_appls(conference_name)
+
+    # Проверяем, есть ли объекты, соответствующие заданному значению conference
+    if len(embed_list) > 0:
+        for embed in embed_list:
+            await ctx.send(embed=embed)
+    else:
+        await ctx.send("Нет заявок для данной конференции.")
 
 @bot.command()
 async def helps(ctx):
@@ -773,6 +838,7 @@ async def helps(ctx):
               f">select (выбрать конференцию по названию, входной аргумент: название!)"
               f">edit_pub (внести изменения в существующую публикацию, входной аргумент: ID)"
               f">select_app (посмотреть информацию о заявке, входной аргумент: ID заявки!"
+              f">search (посмотреть список конференций по заявке, входной аргумент: Название конференции!"
     )
     await ctx.send(embed=embed)
 bot.run(TOKEN)
