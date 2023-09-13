@@ -1,0 +1,50 @@
+[
+    {
+      "id": 1,
+      "name_rus":"Длинное название Конференции 1",
+      "name_rus_short": "Конференция 1",
+      "name_eng":"Long name Confernce 1",
+      "name_eng_short": "Conference 1",
+      "conf_start_date": "2022-01-01",
+      "conf_end_date": "2022-01-10",
+      "registration_start_date": "2022-01-01", 
+      "registration_end_date": "2022-01-10", 
+      "submission_start_date": "2022-01-01", 
+      "submission_end_date": "2022-01-10",
+      "organized_by": "ГУАП",
+      "url": "https://guap.ru/msnk/",
+      "email": "example@example.com" 
+    },
+    {
+      "id": 2,
+      "name_rus":"Длинное название Конференции 2",
+      "name_rus_short": "Конференция 2",
+      "name_eng":"Long name Confernce 2",
+      "name_eng_short": "Conference 2",
+      "conf_start_date": "2022-02-15",
+      "conf_end_date": "2022-02-18",
+      "registration_start_date": "2022-02-15", 
+      "registration_end_date": "2022-02-18", 
+      "submission_start_date": "2022-02-15", 
+      "submission_end_date": "2022-02-18",
+      "organized_by": "ГУАП",
+      "url": "https://guap.ru/msnk/",
+      "email": "example@example.com" 
+    },
+    {
+      "id": 3,
+      "name_rus":"Длинное название Конференции 3",
+      "name_rus_short": "Конференция 3",
+      "name_eng":"Long name Confernce 3",
+      "name_eng_short": "Conference 3",
+      "conf_start_date": "2024-03-10",
+      "conf_end_date": "2024-03-12",
+      "registration_start_date": "2024-03-10", 
+      "registration_end_date": "2024-03-12", 
+      "submission_start_date": "2024-03-10", 
+      "submission_end_date": "2024-03-12",
+      "organized_by": "ГУАП",
+      "url": "https://guap.ru/msnk/",
+      "email": "example@example.com" 
+    }
+  ]

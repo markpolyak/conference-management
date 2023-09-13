@@ -1,0 +1,25 @@
+{
+    "2": {
+        "id": "2",
+        "telegram_id": "2",
+        "discord_id": "3",
+        "submitted_at": "2023-09-08 14:56",
+        "updated_at": "2023-09-08 15:14",
+        "email": "5",
+        "phone": "4",
+        "name": "1",
+        "surname": "2",
+        "patronymic": "4",
+        "university": "7",
+        "student_group": "5",
+        "applicant_role": "4",
+        "title": "2",
+        "adviser": "1",
+        "conference": "���� ���",
+        "coauthors": {
+            "name": "��",
+            "surname": "��",
+            "patronymic": "��� ������ �� ��������, ��������� �������� ����� �� ���� ������� �����, ����� ������, �� � ������ �������� ��� ��, ��� ��������� ���� ��� �� ������� ��� �����"
+        }
+    }
+}

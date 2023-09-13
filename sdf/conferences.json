@@ -1,0 +1,58 @@
+[
+    {
+      "id": 1,
+      "name_rus_short": "Тест один",
+      "name_eng_short": "Conference 1",
+      "conf_start_date": "2022-01-01",
+      "conf_end_date": "2022-01-10"
+    },
+    {
+      "id": 2,
+      "name_rus_short": "Тест два",
+      "name_eng_short": "Conference 2",
+      "conf_start_date": "2022-02-15",
+      "conf_end_date": "2022-02-18"
+    },
+    {
+      "id": 3,
+      "name_rus_short": "Тест три",
+      "name_eng_short": "Conference 3",
+      "conf_start_date": "2024-03-10",
+      "conf_end_date": "2024-03-12"
+    },
+  {
+      "id": 4,
+      "name_rus_short": "Тест четыре",
+      "name_eng_short": "Conference 3",
+      "conf_start_date": "2024-03-10",
+      "conf_end_date": "2024-03-12"
+    },
+  {
+      "id": 5,
+      "name_rus_short": "Тест пять",
+      "name_eng_short": "Conference 3",
+      "conf_start_date": "2022-03-10",
+      "conf_end_date": "2021-03-12"
+    },
+  {
+      "id": 6,
+      "name_rus_short": "Тест шесть",
+      "name_eng_short": "Conference 3",
+      "conf_start_date": "2024-03-10",
+      "conf_end_date": "2024-03-12"
+    },
+  {
+      "id": 7,
+      "name_rus_short": "Тест семь",
+      "name_eng_short": "Conference 3",
+      "conf_start_date": "2024-03-10",
+      "conf_end_date": "2024-03-12"
+    },
+  {
+      "id": 8,
+      "name_rus_short": "Тест восемь",
+      "name_eng_short": "Conference 3",
+      "conf_start_date": "2024-03-10",
+      "conf_end_date": "2024-03-12"
+    }
+  ]
