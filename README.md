@@ -1,1 +1,4 @@
-# conference-management
+# Запуск файла main.py
+1. Перейти в директорию проекта
+2. Прописать команду pip install aiogram
+3. Запустить код командой python main.py
